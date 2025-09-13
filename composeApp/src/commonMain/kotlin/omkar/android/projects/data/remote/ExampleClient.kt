@@ -17,7 +17,7 @@ class ExampleClient(
 ) {
     suspend fun fetchExample(): ApiResponseWrapper<ExampleResponse> {
         return handleApiCall {
-            httpClient.post(Constants.Spiker.FETCH_TRANSCRIPT_END_POINT) {
+            httpClient.post(Constants.RemoteConstants.EXAMPLE_ENDPOINT) {
                 contentType(ContentType.Application.Json)
                 setBody(ExampleRequest())
             }.body()

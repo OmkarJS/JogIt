@@ -38,7 +38,6 @@ fun HomePage() {
     Scaffold(
         topBar = {
             HomeRoofView(
-                colors = colors,
                 isSearching = isSearching,
                 searchText = searchText,
                 onTextChange = {
