@@ -1,4 +1,4 @@
-rootProject.name = "KMPTemplate"
+rootProject.name = "JogIt"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
