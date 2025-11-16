@@ -1,4 +1,4 @@
-package omkar.android.projects.presentation.theme
+package omkar.android.projects
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

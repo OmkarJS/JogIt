@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import omkar.android.projects.app.components.percentOfScreenHeight
 import omkar.android.projects.app.constants.Constants
-import omkar.android.projects.presentation.theme.LocalAppColors
+import omkar.android.projects.LocalAppColors
 
 @Composable
 fun HomeRoofView (

@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import omkar.android.projects.presentation.theme.LocalAppColors
+import omkar.android.projects.LocalAppColors
 
 @Composable
 fun ProfilePage() {

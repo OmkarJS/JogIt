@@ -18,18 +18,4 @@ class HomeViewModel(
     private val _exampleState = MutableStateFlow("")
     val exampleState: StateFlow<String> = _exampleState.asStateFlow()
 
-    // Example Network call from usecase
-    fun fetch() {
-        viewModelScope.launch {
-            when(exampleUseCase.invoke()) {
-                is ApiResponseWrapper.Success -> {}
-
-                is ApiResponseWrapper.Failure -> {}
-
-                is ApiResponseWrapper.NetworkError -> {}
-
-                is ApiResponseWrapper.UnknownError -> {}
-            }
-        }
-    }
 }

@@ -3,15 +3,15 @@ package omkar.android.projects.di
 
 import omkar.android.projects.data.remote.ExampleClient
 import omkar.android.projects.data.remote.HttpClientEngine
-import omkar.android.projects.data.repository.ExampleRepositoryImpl
-import omkar.android.projects.domain.repository.ExampleRepository
+import omkar.android.projects.data.repository.NotesJoggerRepositoryImpl
+import omkar.android.projects.domain.repository.NotesJoggerRepository
 import omkar.android.projects.domain.usecases.ExampleUseCase
 import omkar.android.projects.presentation.home.HomeViewModel
 import org.koin.dsl.module
 
 val commonModule = module {
     // Repository
-    single<ExampleRepository> { ExampleRepositoryImpl(get()) }
+    single<NotesJoggerRepository> { NotesJoggerRepositoryImpl(/*get()*/) }
 
     // Usecase
     single { ExampleUseCase(get()) }

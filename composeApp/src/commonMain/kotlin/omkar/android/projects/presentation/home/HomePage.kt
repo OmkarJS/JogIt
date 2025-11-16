@@ -16,7 +16,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import omkar.android.projects.app.widget.HomeRoofView
 import omkar.android.projects.presentation.navigation.Screens
-import omkar.android.projects.presentation.theme.LocalAppColors
+import omkar.android.projects.LocalAppColors
 import org.koin.compose.koinInject
 
 @Composable
