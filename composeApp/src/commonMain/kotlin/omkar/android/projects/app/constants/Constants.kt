@@ -3,9 +3,8 @@ package omkar.android.projects.app.constants
 class Constants {
 
     object Screen {
-        const val HOME_PAGE = "Home"
+        const val HOME_PAGE = "JogIt"
         const val PROFILE_PAGE = "Profile"
-        const val SUMMARY_PAGE = "Summary"
     }
 
     object RemoteConstants {

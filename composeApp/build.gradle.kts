@@ -8,6 +8,9 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     kotlin("plugin.serialization") version "1.9.20"
+
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room)
 }
 
 kotlin {
@@ -51,14 +54,14 @@ kotlin {
         binaries.executable()
     }*/
 
-    js(IR) {
+    /*js(IR) {
         browser {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
             }
         }
         binaries.executable()
-    }
+    }*/
     
     sourceSets {
         commonMain.dependencies {
@@ -94,6 +97,10 @@ kotlin {
             // Dependency Injection (Koin)
             api(libs.koin.core)
             implementation(libs.koin.compose)
+
+            // Room
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqlite.bundled)
         }
 
         androidMain.dependencies {
@@ -107,6 +114,13 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
             implementation(libs.koin.compose.viewmodel)
+
+            // Room (Android related)
+            implementation(libs.androidx.room.sqlite.wrapper)
+        }
+
+        iosMain.dependencies {
+
         }
 
         val desktopMain by getting {
@@ -119,13 +133,14 @@ kotlin {
             }
         }
 
-        jsMain.dependencies {
+        // Removed web for now as it doesn't support room and also KMP and CMP fully.
+        /*jsMain.dependencies {
             // Ktor client - Web
             implementation(libs.ktor.client.js)
 
             // Core dependency
             implementation(compose.html.core)
-        }
+        }*/
     }
 }
 
@@ -170,4 +185,16 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+
+dependencies {
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    add("kspIosX64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
+    add("kspDesktop", libs.androidx.room.compiler)
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }

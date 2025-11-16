@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import omkar.android.projects.data.remote.util.ApiResponseWrapper
 import omkar.android.projects.domain.usecases.ExampleUseCase
-import omkar.android.projects.presentation.expectuals.getViewModelScope
+import omkar.android.projects.app.expectuals.getViewModelScope
 
 class HomeViewModel(
     private val exampleUseCase: ExampleUseCase
@@ -18,18 +18,4 @@ class HomeViewModel(
     private val _exampleState = MutableStateFlow("")
     val exampleState: StateFlow<String> = _exampleState.asStateFlow()
 
-    // Example Network call from usecase
-    fun fetch() {
-        viewModelScope.launch {
-            when(exampleUseCase.invoke()) {
-                is ApiResponseWrapper.Success -> {}
-
-                is ApiResponseWrapper.Failure -> {}
-
-                is ApiResponseWrapper.NetworkError -> {}
-
-                is ApiResponseWrapper.UnknownError -> {}
-            }
-        }
-    }
 }

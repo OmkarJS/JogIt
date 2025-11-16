@@ -1,4 +1,4 @@
-package omkar.android.projects.presentation.expectuals
+package omkar.android.projects.app.expectuals
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents

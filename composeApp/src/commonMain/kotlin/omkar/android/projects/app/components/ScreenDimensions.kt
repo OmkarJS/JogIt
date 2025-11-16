@@ -3,8 +3,8 @@ package omkar.android.projects.app.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
-import omkar.android.projects.presentation.expectuals.getScreenHeight
-import omkar.android.projects.presentation.expectuals.getScreenWidth
+import omkar.android.projects.app.expectuals.getScreenHeight
+import omkar.android.projects.app.expectuals.getScreenWidth
 
 private const val halfValue = 0.5f
 

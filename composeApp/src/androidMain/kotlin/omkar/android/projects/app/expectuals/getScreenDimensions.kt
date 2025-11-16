@@ -1,4 +1,4 @@
-package omkar.android.projects.presentation.expectuals
+package omkar.android.projects.app.expectuals
 
 import android.content.res.Resources
 
