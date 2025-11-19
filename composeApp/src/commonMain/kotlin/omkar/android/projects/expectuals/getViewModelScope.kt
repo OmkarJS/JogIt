@@ -1,4 +1,4 @@
-package omkar.android.projects.app.expectuals
+package omkar.android.projects.expectuals
 
 import kotlinx.coroutines.CoroutineScope
 

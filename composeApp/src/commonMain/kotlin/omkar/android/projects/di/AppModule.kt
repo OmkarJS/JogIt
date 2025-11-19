@@ -1,26 +1,41 @@
 package omkar.android.projects.di
 
 
+import omkar.android.projects.data.local.repository.NotesJoggerRepositoryImpl
 import omkar.android.projects.data.remote.ExampleClient
 import omkar.android.projects.data.remote.HttpClientEngine
-import omkar.android.projects.data.repository.NotesJoggerRepositoryImpl
 import omkar.android.projects.domain.repository.NotesJoggerRepository
-import omkar.android.projects.domain.usecases.ExampleUseCase
+import omkar.android.projects.domain.usecases.CreateNotesUseCase
+import omkar.android.projects.domain.usecases.GetNotesListUseCase
+import omkar.android.projects.domain.usecases.JogUseCases
+import omkar.android.projects.domain.usecases.UpdateNotesUseCase
 import omkar.android.projects.presentation.home.HomeViewModel
 import org.koin.dsl.module
 
 val commonModule = module {
-    // Repository
-    single<NotesJoggerRepository> { NotesJoggerRepositoryImpl(/*get()*/) }
+    /**  Repository  */
+    single<NotesJoggerRepository> { NotesJoggerRepositoryImpl(get()) }
 
-    // Usecase
-    single { ExampleUseCase(get()) }
 
-    // Client
+    /**  Usecase  */
+    // Joggable
+    factory { CreateNotesUseCase(get()) }
+    factory { UpdateNotesUseCase(get()) }
+    factory { GetNotesListUseCase(get()) }
+    factory {
+        JogUseCases(
+            createNotesUseCase = get(),
+            updateNotesUseCase = get(),
+            getNotesListUseCase = get()
+        )
+    }
+
+
+    /**  Client  */
     val httpClient = HttpClientEngine().create()
     single { ExampleClient(httpClient = httpClient) }
 
-    // Viewmodel
+    /**  Viewmodel  */
     single {
         // Returns single instance
         HomeViewModel(get())

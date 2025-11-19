@@ -1,0 +1,22 @@
+package omkar.android.projects.data.local.repository
+
+import kotlinx.coroutines.flow.Flow
+import omkar.android.projects.data.local.db.dao.JogDao
+import omkar.android.projects.data.local.db.entities.Joggable
+import omkar.android.projects.domain.repository.NotesJoggerRepository
+
+class NotesJoggerRepositoryImpl(
+    private val jogDao: JogDao
+): NotesJoggerRepository {
+    override suspend fun createNotes(note: Joggable): Long {
+        return jogDao.createNote(note)
+    }
+
+    override suspend fun updateNotes(note: Joggable): Int {
+        return jogDao.updateNote(note)
+    }
+
+    override fun getAllNotes(): Flow<List<Joggable>> {
+        return jogDao.getAllNotes()
+    }
+}

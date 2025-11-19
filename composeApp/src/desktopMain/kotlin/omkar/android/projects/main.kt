@@ -5,7 +5,7 @@ import androidx.compose.ui.window.application
 import omkar.android.projects.app.utils.KoinUtils
 
 fun main() = application {
-    KoinUtils.startKoin()
+    KoinUtils.startKoinProcess()
 
     Window(
         onCloseRequest = ::exitApplication,

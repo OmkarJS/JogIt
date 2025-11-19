@@ -7,8 +7,8 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import omkar.android.projects.app.constants.Constants
-import omkar.android.projects.data.model.ExampleRequest
-import omkar.android.projects.data.model.ExampleResponse
+import omkar.android.projects.data.local.model.ExampleRequest
+import omkar.android.projects.data.local.model.ExampleResponse
 import omkar.android.projects.data.remote.util.ApiResponseWrapper
 import omkar.android.projects.data.remote.util.handleApiCall
 

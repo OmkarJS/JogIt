@@ -10,4 +10,8 @@ class Constants {
     object RemoteConstants {
         const val EXAMPLE_ENDPOINT = "example_endpoint"
     }
+
+    object DataBaseConstants {
+        const val DB_NAME = "jogit.db"
+    }
 }

@@ -1,4 +1,4 @@
-package omkar.android.projects.data.model
+package omkar.android.projects.data.local.model
 
 import kotlinx.serialization.Serializable
 

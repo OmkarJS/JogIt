@@ -28,7 +28,9 @@ fun HomePage() {
     // Search
     var searchText by remember { mutableStateOf("") }
     var isSearching by remember { mutableStateOf(false) }
-    val exampleState by homeViewModel.exampleState.collectAsState()
+
+
+    val exampleState by homeViewModel.notesList.collectAsState()
 
     fun hideSearchSuggestion() {
         searchText = ""
