@@ -13,7 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import jogit.composeapp.generated.resources.Res
+import jogit.composeapp.generated.resources.profile
 import omkar.android.projects.LocalAppColors
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ProfilePage() {
@@ -35,7 +38,7 @@ fun ProfilePage() {
         }
 
         Text(
-            "Profile",
+            stringResource(Res.string.profile),
             modifier = Modifier
                 .weight(1f)
                 .clickable { navigator.pop() }

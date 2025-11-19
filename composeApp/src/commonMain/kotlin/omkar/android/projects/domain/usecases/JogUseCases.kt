@@ -7,7 +7,9 @@ import omkar.android.projects.domain.repository.NotesJoggerRepository
 data class JogUseCases(
     val createNotesUseCase: CreateNotesUseCase,
     val updateNotesUseCase: UpdateNotesUseCase,
-    val getNotesListUseCase: GetNotesListUseCase
+    val getNotesListUseCase: GetNotesListUseCase,
+    val getNoteFromIDUseCase: GetNoteFromIDUseCase,
+    val deleteNoteUseCase: DeleteNoteUseCase
 )
 
 class CreateNotesUseCase(
@@ -23,6 +25,22 @@ class UpdateNotesUseCase(
 ) {
     suspend operator fun invoke(note: Joggable): Int {
         return notesJoggerRepository.updateNotes(note)
+    }
+}
+
+class DeleteNoteUseCase(
+    private val notesJoggerRepository: NotesJoggerRepository
+) {
+    suspend operator fun invoke(note: Joggable): Int {
+        return notesJoggerRepository.deleteNote(note)
+    }
+}
+
+class GetNoteFromIDUseCase(
+    private val notesJoggerRepository: NotesJoggerRepository
+) {
+    suspend operator fun invoke(id: Long): Joggable? {
+        return notesJoggerRepository.getNote(id)
     }
 }
 
