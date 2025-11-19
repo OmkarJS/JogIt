@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
+
+    // Common
     <string name="hello_world">Hello World</string>
+
+    // Profile
+    <string name="profile">Profile</string>
+
+    // Jog Details
+    <string name="jog_details">Jog Details</string>
+
 </resources>

@@ -1,6 +1,7 @@
 package omkar.android.projects.data.local.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
@@ -14,6 +15,12 @@ interface JogDao {
 
     @Update
     suspend fun updateNote(note: Joggable): Int
+
+    @Delete
+    suspend fun deleteNote(note: Joggable): Int
+
+    @Query("SELECT * FROM jog_table WHERE id = :id LIMIT 1")
+    suspend fun getNote(id: Long): Joggable?
 
     @Query("SELECT * FROM jog_table")
     fun getAllNotes(): Flow<List<Joggable>>

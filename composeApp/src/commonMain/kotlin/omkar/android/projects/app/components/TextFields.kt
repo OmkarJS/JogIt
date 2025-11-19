@@ -9,7 +9,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import jogit.composeapp.generated.resources.Res
+import jogit.composeapp.generated.resources.hello_world
 import omkar.android.projects.LocalAppColors
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 /**
  - Configuration class for text styling
@@ -20,7 +24,8 @@ data class TextConfig(
     val maxLines: Int = 1,
     val overflow: TextOverflow = TextOverflow.Ellipsis,
     val modifier: Modifier = Modifier,
-    val fontWeight: FontWeight = FontWeight.Normal
+    val fontWeight: FontWeight = FontWeight.Normal,
+    val color: Color? = null,
 )
 
 /**
@@ -29,29 +34,35 @@ data class TextConfig(
  */
 @Composable
 private fun BaseText(
-    text: String,
-    color: Color,
+    text: Any,
     fontSize: TextUnit,
     config: TextConfig = TextConfig()
-) = Text(
-    text = text,
-    modifier = config.modifier,
-    color = color,
-    fontSize = fontSize,
-    fontWeight = config.fontWeight,
-    textAlign = config.textAlign,
-    maxLines = config.maxLines,
-    overflow = config.overflow
-)
+) {
+    val colorToBeUsed = config.color ?: LocalAppColors.current.black
+    val textToBeUsed = when(text) {
+        is String -> text
+        is StringResource -> stringResource(text)
+        else -> stringResource(Res.string.hello_world)
+    }
+
+    Text(
+        text = textToBeUsed,
+        modifier = config.modifier,
+        color = colorToBeUsed,
+        fontSize = fontSize,
+        fontWeight = config.fontWeight,
+        textAlign = config.textAlign,
+        maxLines = config.maxLines,
+        overflow = config.overflow
+    )
+}
 
 @Composable
 fun ExtraSmallText(
     text: String,
-    color: Color = LocalAppColors.current.black,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    color = color,
     fontSize = 10.sp,
     config = config
 )
@@ -59,11 +70,9 @@ fun ExtraSmallText(
 @Composable
 fun SmallText(
     text: String,
-    color: Color = LocalAppColors.current.black,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    color = color,
     fontSize = 12.sp,
     config = config
 )
@@ -71,11 +80,9 @@ fun SmallText(
 @Composable
 fun SemiMediumText(
     text: String,
-    color: Color = LocalAppColors.current.black,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    color = color,
     fontSize = 14.sp,
     config = config
 )
@@ -83,11 +90,9 @@ fun SemiMediumText(
 @Composable
 fun MediumText(
     text: String,
-    color: Color = LocalAppColors.current.black,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    color = color,
     fontSize = 16.sp,
     config = config
 )
@@ -95,11 +100,9 @@ fun MediumText(
 @Composable
 fun SemiLargeText(
     text: String,
-    color: Color = LocalAppColors.current.black,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    color = color,
     fontSize = 18.sp,
     config = config
 )
@@ -107,11 +110,9 @@ fun SemiLargeText(
 @Composable
 fun LargeText(
     text: String,
-    color: Color = LocalAppColors.current.black,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    color = color,
     fontSize = 20.sp,
     config = config
 )
@@ -119,11 +120,9 @@ fun LargeText(
 @Composable
 fun ExtraLargeText(
     text: String,
-    color: Color = LocalAppColors.current.black,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    color = color,
     fontSize = 22.sp,
     config = config
 )
@@ -131,11 +130,9 @@ fun ExtraLargeText(
 @Composable
 fun TitleSmallText(
     text: String,
-    color: Color = LocalAppColors.current.black,
     config: TextConfig = TextConfig(fontWeight = FontWeight.Bold)
 ) = BaseText(
     text = text,
-    color = color,
     fontSize = 24.sp,
     config = config
 )
@@ -143,11 +140,9 @@ fun TitleSmallText(
 @Composable
 fun TitleMediumText(
     text: String,
-    color: Color = LocalAppColors.current.black,
     config: TextConfig = TextConfig(fontWeight = FontWeight.Bold)
 ) = BaseText(
     text = text,
-    color = color,
     fontSize = 26.sp,
     config = config
 )
@@ -155,11 +150,9 @@ fun TitleMediumText(
 @Composable
 fun TitleLargeText(
     text: String,
-    color: Color = LocalAppColors.current.black,
     config: TextConfig = TextConfig(fontWeight = FontWeight.Bold)
 ) = BaseText(
     text = text,
-    color = color,
     fontSize = 28.sp,
     config = config
 )

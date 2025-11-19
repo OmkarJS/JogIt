@@ -16,6 +16,14 @@ class NotesJoggerRepositoryImpl(
         return jogDao.updateNote(note)
     }
 
+    override suspend fun deleteNote(note: Joggable): Int {
+        return jogDao.deleteNote(note)
+    }
+
+    override suspend fun getNote(id: Long): Joggable? {
+        return jogDao.getNote(id)
+    }
+
     override fun getAllNotes(): Flow<List<Joggable>> {
         return jogDao.getAllNotes()
     }
