@@ -14,4 +14,8 @@ class Constants {
     object DataBaseConstants {
         const val DB_NAME = "jogit.db"
     }
+
+    object PasswordConstants {
+        val hexChars = "0123456789abcdef".toCharArray()
+    }
 }

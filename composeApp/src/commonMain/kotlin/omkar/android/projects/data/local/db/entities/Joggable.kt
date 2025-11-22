@@ -8,5 +8,8 @@ data class Joggable(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
     val title: String,
-    val content: String
+    val content: String,
+    val protected: Boolean = false,
+    val passwordHash: String? = null,
+    val salt: String? = null
 )

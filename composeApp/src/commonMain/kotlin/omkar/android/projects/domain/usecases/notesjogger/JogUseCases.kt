@@ -1,8 +1,8 @@
-package omkar.android.projects.domain.usecases
+package omkar.android.projects.domain.usecases.notesjogger
 
 import kotlinx.coroutines.flow.Flow
 import omkar.android.projects.data.local.db.entities.Joggable
-import omkar.android.projects.domain.repository.NotesJoggerRepository
+import omkar.android.projects.domain.repository.notesjogger.NotesJoggerRepository
 
 data class JogUseCases(
     val createNotesUseCase: CreateNotesUseCase,
