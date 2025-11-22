@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import omkar.android.projects.data.local.db.entities.Joggable
-import omkar.android.projects.domain.usecases.JogUseCases
+import omkar.android.projects.domain.usecases.notesjogger.JogUseCases
 
 class HomeViewModel(
-    private val jogUseCases: JogUseCases
+    private val jogUseCases: JogUseCases,
 ): ViewModel() {
 
     private val _notesList = MutableStateFlow<List<Joggable>>(emptyList())
@@ -27,12 +27,6 @@ class HomeViewModel(
                 .collectLatest {
                 _notesList.value = it
             }
-        }
-    }
-
-    fun createNote(value: Joggable) {
-        viewModelScope.launch(Dispatchers.IO) {
-            jogUseCases.createNotesUseCase.invoke(value)
         }
     }
 

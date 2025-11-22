@@ -1,9 +1,9 @@
-package omkar.android.projects.data.local.repository
+package omkar.android.projects.data.local.repository.notesjogger
 
 import kotlinx.coroutines.flow.Flow
 import omkar.android.projects.data.local.db.dao.JogDao
 import omkar.android.projects.data.local.db.entities.Joggable
-import omkar.android.projects.domain.repository.NotesJoggerRepository
+import omkar.android.projects.domain.repository.notesjogger.NotesJoggerRepository
 
 class NotesJoggerRepositoryImpl(
     private val jogDao: JogDao

@@ -87,7 +87,6 @@ fun HomeRoofView (
 
     Row(
         modifier = Modifier
-            .padding(vertical = 10.dp)
             .fillMaxWidth()
             .statusBarsPadding()
             .padding(horizontal = 16.dp)
