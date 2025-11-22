@@ -97,10 +97,15 @@ kotlin {
             // Dependency Injection (Koin)
             api(libs.koin.core)
             implementation(libs.koin.compose)
+            implementation(libs.koin.androidx.compose)
+            implementation(libs.koin.compose.viewmodel)
 
             // Room
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
+
+            // Material 3
+            implementation(compose.material3)
         }
 
         androidMain.dependencies {
@@ -112,8 +117,6 @@ kotlin {
 
             // Dependency Injection (Koin - Android Related)
             implementation(libs.koin.android)
-            implementation(libs.koin.androidx.compose)
-            implementation(libs.koin.compose.viewmodel)
 
             // Room (Android related)
             implementation(libs.androidx.room.sqlite.wrapper)
