@@ -29,6 +29,13 @@ fun SmallSpacer() = Spacer(
 )
 
 @Composable
+fun SemiMediumSpacer() = Spacer(
+    modifier = Modifier
+        .fillMaxWidth()
+        .height(16.dp)
+)
+
+@Composable
 fun MediumSpacer() = Spacer(
     modifier = Modifier
         .fillMaxWidth()

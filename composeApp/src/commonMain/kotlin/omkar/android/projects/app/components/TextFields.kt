@@ -26,6 +26,7 @@ data class TextConfig(
     val modifier: Modifier = Modifier,
     val fontWeight: FontWeight = FontWeight.Normal,
     val color: Color? = null,
+    val fontSize: TextUnit = TextUnit.Unspecified
 )
 
 /**
@@ -35,7 +36,6 @@ data class TextConfig(
 @Composable
 private fun BaseText(
     text: Any,
-    fontSize: TextUnit,
     config: TextConfig = TextConfig()
 ) {
     val colorToBeUsed = config.color ?: LocalAppColors.current.black
@@ -49,7 +49,7 @@ private fun BaseText(
         text = textToBeUsed,
         modifier = config.modifier,
         color = colorToBeUsed,
-        fontSize = fontSize,
+        fontSize = config.fontSize,
         fontWeight = config.fontWeight,
         textAlign = config.textAlign,
         maxLines = config.maxLines,
@@ -59,101 +59,91 @@ private fun BaseText(
 
 @Composable
 fun ExtraSmallText(
-    text: String,
+    text: Any,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    fontSize = 10.sp,
-    config = config
+    config = config.copy(fontSize = 10.sp)
 )
 
 @Composable
 fun SmallText(
-    text: String,
+    text: Any,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    fontSize = 12.sp,
-    config = config
+    config = config.copy(fontSize = 12.sp)
 )
 
 @Composable
 fun SemiMediumText(
-    text: String,
+    text: Any,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    fontSize = 14.sp,
-    config = config
+    config = config.copy(fontSize = 14.sp)
 )
 
 @Composable
 fun MediumText(
-    text: String,
+    text: Any,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    fontSize = 16.sp,
-    config = config
+    config = config.copy(fontSize = 16.sp)
 )
 
 @Composable
 fun SemiLargeText(
-    text: String,
+    text: Any,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    fontSize = 18.sp,
-    config = config
+    config = config.copy(fontSize = 18.sp)
 )
 
 @Composable
 fun LargeText(
-    text: String,
+    text: Any,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    fontSize = 20.sp,
-    config = config
+    config = config.copy(fontSize = 20.sp)
 )
 
 @Composable
 fun ExtraLargeText(
-    text: String,
+    text: Any,
     config: TextConfig = TextConfig()
 ) = BaseText(
     text = text,
-    fontSize = 22.sp,
-    config = config
+    config = config.copy(fontSize = 22.sp)
 )
 
 @Composable
 fun TitleSmallText(
-    text: String,
+    text: Any,
     config: TextConfig = TextConfig(fontWeight = FontWeight.Bold)
 ) = BaseText(
     text = text,
-    fontSize = 24.sp,
-    config = config
+    config = config.copy(fontSize = 24.sp)
 )
 
 @Composable
 fun TitleMediumText(
-    text: String,
+    text: Any,
     config: TextConfig = TextConfig(fontWeight = FontWeight.Bold)
 ) = BaseText(
     text = text,
-    fontSize = 26.sp,
-    config = config
+    config = config.copy(fontSize = 26.sp)
 )
 
 @Composable
 fun TitleLargeText(
-    text: String,
+    text: Any,
     config: TextConfig = TextConfig(fontWeight = FontWeight.Bold)
 ) = BaseText(
     text = text,
-    fontSize = 28.sp,
-    config = config
+    config = config.copy(fontSize = 28.sp)
 )
 

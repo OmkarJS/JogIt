@@ -9,5 +9,7 @@
 
     // Jog Details
     <string name="jog_details">Jog Details</string>
+    <string name="title_label">Your title...</string>
+    <string name="content_label">Jog your content...</string>
 
 </resources>

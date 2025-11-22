@@ -14,11 +14,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -40,6 +40,7 @@ import omkar.android.projects.app.components.MediumText
 import omkar.android.projects.app.components.SemiLargeText
 import omkar.android.projects.app.components.TextConfig
 import omkar.android.projects.app.widget.HomeRoofView
+import omkar.android.projects.app.widget.icon.CustomIcon
 import omkar.android.projects.data.local.db.entities.Joggable
 import omkar.android.projects.presentation.navigation.Screens
 import org.jetbrains.compose.resources.painterResource
@@ -84,6 +85,15 @@ fun HomePage() {
                     hideSearchSuggestion()
                 }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    navigator.push(Screens.JogDetailScreen())
+                }
+            ) {
+                CustomIcon(icon = Icons.Default.Add)
+            }
         }
     ) { paddingValues ->
         Column(
@@ -111,23 +121,6 @@ fun HomePage() {
                     )
                 }
             }
-
-            TextButton(
-                modifier = Modifier.fillMaxWidth(0.96f),
-                onClick = {
-                    val note = Joggable(
-                        title = "Jog it",
-                        content = "Jog it fast you idiot."
-                    )
-                    homeViewModel.createNote(note)
-                },
-                content = {
-                    Text(
-                        text = "Create notes",
-                        style = MaterialTheme.typography.subtitle2,
-                    )
-                }
-            )
         }
     }
 }

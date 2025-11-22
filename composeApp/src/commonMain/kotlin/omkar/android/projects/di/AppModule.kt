@@ -51,6 +51,7 @@ val commonModule = module {
     factory {
         // Returns new viewmodel instance every time this is called. Add if needed.
         JogDetailsViewModel(
+            createNotesUseCase = get(),
             updateNotesUseCase = get(),
             getNoteFromIDUseCase = get()
         )
