@@ -75,7 +75,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
 
             // Navigation
-            implementation(libs.voyager.navigator)
+            implementation(libs.androidx.navigation.compose)
 
             // Ktor Client
             implementation(libs.ktor.client.core)
@@ -97,7 +97,6 @@ kotlin {
             // Dependency Injection (Koin)
             api(libs.koin.core)
             implementation(libs.koin.compose)
-            implementation(libs.koin.androidx.compose)
             implementation(libs.koin.compose.viewmodel)
 
             // Room
@@ -117,6 +116,7 @@ kotlin {
 
             // Dependency Injection (Koin - Android Related)
             implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
 
             // Room (Android related)
             implementation(libs.androidx.room.sqlite.wrapper)

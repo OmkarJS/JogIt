@@ -20,6 +20,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,34 +28,44 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import jogit.composeapp.generated.resources.Res
 import jogit.composeapp.generated.resources.compose_multiplatform
 import omkar.android.projects.LocalAppColors
 import omkar.android.projects.app.components.ExtraSmallSpacer
 import omkar.android.projects.app.components.MediumText
 import omkar.android.projects.app.components.SemiLargeText
+import omkar.android.projects.app.components.SmallSpacer
 import omkar.android.projects.app.components.TextConfig
 import omkar.android.projects.app.widget.HomeRoofView
+import omkar.android.projects.app.widget.bottomsheet.PasswordUnlockSheet
 import omkar.android.projects.app.widget.icon.CustomIcon
 import omkar.android.projects.data.local.db.entities.Joggable
-import omkar.android.projects.presentation.navigation.Screens
+import omkar.android.projects.shared.password.presentation.PasswordViewmodel
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
-fun HomePage() {
-    val navigator = LocalNavigator.currentOrThrow
+fun HomePage(
+    onProfileClicked: () -> Unit,
+    onNoteClicked: (noteID: Long?) -> Unit,
+    onCreateNoteClicked: () -> Unit
+) {
     val colors = LocalAppColors.current
-    val homeViewModel: HomeViewModel = koinInject()
+    val homeViewModel = koinViewModel<HomeViewModel>()
+    val passwordViewModel = koinViewModel<PasswordViewmodel>()
 
     // Search
     var searchText by remember { mutableStateOf("") }
     var isSearching by remember { mutableStateOf(false) }
+
+    // UI state
+    var itemClickState by remember { mutableStateOf<Joggable?>(null) }
 
     fun hideSearchSuggestion() {
         searchText = ""
@@ -63,6 +74,17 @@ fun HomePage() {
 
     // Joggable
     val notesList by homeViewModel.notesList.collectAsState()
+
+    // Password
+    val validationState by passwordViewModel.validationState.collectAsState()
+
+    LaunchedEffect(validationState) {
+        if (validationState == true) {
+            itemClickState?.let { note -> onNoteClicked(note.id) }
+            itemClickState = null
+            passwordViewModel.resetValidation()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -79,20 +101,23 @@ fun HomePage() {
                     isSearching = true
                 },
                 onProfileClick = {
-                    navigator.push(Screens.ProfilePage)
+                   onProfileClicked()
                 },
                 onCloseSearch = {
                     hideSearchSuggestion()
                 }
             )
+
+            SmallSpacer()
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    navigator.push(Screens.JogDetailScreen())
-                }
+                    onCreateNoteClicked()
+                },
+                backgroundColor = colors.primary
             ) {
-                CustomIcon(icon = Icons.Default.Add)
+                CustomIcon(icon = Icons.Default.Add, iconColor = Color.White)
             }
         }
     ) { paddingValues ->
@@ -113,7 +138,7 @@ fun HomePage() {
                     NoteItem(
                         note = note,
                         onClick = {
-                            navigator.push(Screens.JogDetailScreen(note.id))
+                            itemClickState = note
                         },
                         onDelete = {
                             homeViewModel.deleteNote(it)
@@ -121,6 +146,30 @@ fun HomePage() {
                     )
                 }
             }
+        }
+
+        itemClickState?.let { clickedNote ->
+
+            if (!passwordViewModel.isProtected(clickedNote)) {
+                onNoteClicked(clickedNote.id)
+                itemClickState = null
+                return@let
+            }
+
+            PasswordUnlockSheet(
+                errorMessage = if (validationState == false) "Incorrect password" else null,
+                onClickUnlock = { enteredPassword ->
+                    passwordViewModel.verifyPassword(
+                        enteredPassword,
+                        clickedNote.passwordHash,
+                        clickedNote.salt
+                    )
+                },
+                onDismiss = {
+                    itemClickState = null
+                    passwordViewModel.resetValidation()
+                }
+            )
         }
     }
 }

@@ -3,55 +3,54 @@ package omkar.android.projects.app.components
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun DefaultSpacer() = Spacer(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(4.dp)
-)
+fun SizedSpacer(size: Dp, horizontal: Boolean = false) {
+    Spacer(
+        modifier = if (horizontal) {
+            Modifier
+                .width(size)
+        } else {
+            Modifier
+                .fillMaxWidth()
+                .height(size)
+        }
+    )
+}
 
 @Composable
-fun ExtraSmallSpacer() = Spacer(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(6.dp)
-)
+fun DefaultSpacer(horizontal: Boolean = false) =
+    SizedSpacer(4.dp, horizontal)
 
 @Composable
-fun SmallSpacer() = Spacer(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(12.dp)
-)
+fun ExtraSmallSpacer(horizontal: Boolean = false) =
+    SizedSpacer(6.dp, horizontal)
 
 @Composable
-fun SemiMediumSpacer() = Spacer(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(16.dp)
-)
+fun SmallSpacer(horizontal: Boolean = false) =
+    SizedSpacer(12.dp, horizontal)
 
 @Composable
-fun MediumSpacer() = Spacer(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(18.dp)
-)
+fun SemiMediumSpacer(horizontal: Boolean = false) =
+    SizedSpacer(16.dp, horizontal)
 
 @Composable
-fun LargeSpacer() = Spacer(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(24.dp)
-)
+fun MediumSpacer(horizontal: Boolean = false) =
+    SizedSpacer(18.dp, horizontal)
 
 @Composable
-fun ExtraLargeSpacer() = Spacer(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(30.dp)
-)
+fun SemiLargeSpacer(horizontal: Boolean = false) =
+    SizedSpacer(20.dp, horizontal)
+
+@Composable
+fun LargeSpacer(horizontal: Boolean = false) =
+    SizedSpacer(24.dp, horizontal)
+
+@Composable
+fun ExtraLargeSpacer(horizontal: Boolean = false) =
+    SizedSpacer(30.dp, horizontal)

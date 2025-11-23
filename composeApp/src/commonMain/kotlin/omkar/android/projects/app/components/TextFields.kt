@@ -26,7 +26,8 @@ data class TextConfig(
     val modifier: Modifier = Modifier,
     val fontWeight: FontWeight = FontWeight.Normal,
     val color: Color? = null,
-    val fontSize: TextUnit = TextUnit.Unspecified
+    val fontSize: TextUnit = TextUnit.Unspecified,
+    val uppercase: Boolean = false
 )
 
 /**
@@ -46,14 +47,14 @@ private fun BaseText(
     }
 
     Text(
-        text = textToBeUsed,
+        text = if(config.uppercase) textToBeUsed.uppercase() else textToBeUsed,
         modifier = config.modifier,
         color = colorToBeUsed,
         fontSize = config.fontSize,
         fontWeight = config.fontWeight,
         textAlign = config.textAlign,
         maxLines = config.maxLines,
-        overflow = config.overflow
+        overflow = config.overflow,
     )
 }
 

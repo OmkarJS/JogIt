@@ -19,7 +19,8 @@ data class ThemeColors(
     val black: Color,
     val grey: Color,
     val onBackground: Color,
-    val onSurface: Color
+    val onSurface: Color,
+    val error: Color
 )
 
 val LightColorScheme = ThemeColors(
@@ -32,7 +33,8 @@ val LightColorScheme = ThemeColors(
     black = Color(0xFF000000),
     grey = Color(0xFF9E9E9E),
     onBackground = Color(0xFF000000), // Black text on background
-    onSurface = Color(0xFF000000) // Black text on surface
+    onSurface = Color(0xFF000000), // Black text on surface,
+    error = Color(0xFFB3261E)
 )
 
 val DarkColorScheme = ThemeColors(
@@ -45,7 +47,8 @@ val DarkColorScheme = ThemeColors(
     black = Color(0xFFFFFFFF),
     grey = Color(0xFFBDBDBD),
     onBackground = Color(0xFFFFFFFF), // White text on background
-    onSurface = Color(0xFFFFFFFF) // White text on surface
+    onSurface = Color(0xFFFFFFFF), // White text on surface
+    error = Color(0xFFF2B8B5)
 )
 
 fun ThemeColors.toColors() = lightColors(
@@ -57,7 +60,8 @@ fun ThemeColors.toColors() = lightColors(
     onPrimary = white,
     onSecondary = black,
     onBackground = onBackground,
-    onSurface = onSurface
+    onSurface = onSurface,
+    error = error
 )
 
 fun ThemeColors.toDarkColors() = darkColors(
@@ -69,7 +73,8 @@ fun ThemeColors.toDarkColors() = darkColors(
     onPrimary = white,
     onSecondary = black,
     onBackground = onBackground,
-    onSurface = onSurface
+    onSurface = onSurface,
+    error = error
 )
 
 val LocalAppColors = compositionLocalOf { LightColorScheme }
