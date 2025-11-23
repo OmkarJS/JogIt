@@ -10,15 +10,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import omkar.android.projects.LocalAppColors
 import omkar.android.projects.app.components.MediumSpacer
 import omkar.android.projects.app.widget.icon.CustomIcon
 
 @Composable
-fun ProfilePage() {
-    val navigator = LocalNavigator.currentOrThrow
+fun ProfilePage(
+    onBackPressed: () -> Unit
+) {
     val colors = LocalAppColors.current
 
     Column(
@@ -31,7 +30,7 @@ fun ProfilePage() {
         ) {
             CustomIcon(
                 icon = Icons.Default.ArrowBack,
-                onClick = { navigator.pop() }
+                onClick = { onBackPressed() }
             )
         }
 

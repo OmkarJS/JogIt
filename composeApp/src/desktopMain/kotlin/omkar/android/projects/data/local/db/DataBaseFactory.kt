@@ -8,10 +8,12 @@ import java.io.File
 
 actual class DataBaseFactory {
     actual fun createDataBase(): RoomDatabase.Builder<AppDatabase> {
-        val dbFile = File(System.getProperty("java.io.tmpdir"), Constants.DataBaseConstants.DB_NAME)
-        Logger.withTag("DataBaseFactory").d("DB PATH (DESKTOP) = ${dbFile.absolutePath}")
+        val dbName = Constants.DataBaseConstants.DB_NAME
+
+        Logger.withTag("DataBaseFactory").d("DB NAME (DESKTOP) = $dbName")
+
         return Room.databaseBuilder<AppDatabase>(
-            name = dbFile.absolutePath,
+            name = dbName,
         )
     }
 }

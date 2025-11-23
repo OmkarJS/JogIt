@@ -1,16 +1,17 @@
 package omkar.android.projects.app.utils
 
-import cafe.adriel.voyager.navigator.Navigator
-import omkar.android.projects.presentation.navigation.Screens
+import androidx.navigation.NavController
+import omkar.android.projects.app.constants.Constants
 
-fun Navigator.navigateToNoteDetailsScreen(id: Long? = null) {
-    this.push(Screens.JogDetailScreen(id))
+fun NavController.navigateToNoteDetailsScreen(id: Long? = null) {
+    if (id != null) navigate("jog_details/$id")
+    else navigate("jog_details")
 }
 
-fun Navigator.navigateToHomeScreen() {
-    this.push(Screens.HomePage)
+fun NavController.navigateToHomeScreen() {
+    this.navigate(Constants.Routes.HOME)
 }
 
-fun Navigator.navigateToProfileScreen() {
-    this.push(Screens.ProfilePage)
+fun NavController.navigateToProfileScreen() {
+    this.navigate(Constants.Routes.PROFILE)
 }

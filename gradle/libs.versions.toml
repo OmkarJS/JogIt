@@ -15,7 +15,6 @@ junit = "4.13.2"
 kotlin = "2.2.0"
 
 # Common
-voyagerNavigator = "1.1.0-beta02"
 kermit = "1.2.2"
 kamelImage = "0.9.5"
 koin = "3.5.6"
@@ -47,7 +46,7 @@ androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle
 
 # 🔗 COMMON MAIN
 # Navigation
-voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerNavigator" }
+androidx-navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "compose-multiplatform" }
 
 # Image loader
 kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamelImage" }
