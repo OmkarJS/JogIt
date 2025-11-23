@@ -20,6 +20,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -73,6 +74,17 @@ fun HomePage(
 
     // Joggable
     val notesList by homeViewModel.notesList.collectAsState()
+
+    // Password
+    val validationState by passwordViewModel.validationState.collectAsState()
+
+    LaunchedEffect(validationState) {
+        if (validationState == true) {
+            itemClickState?.let { note -> onNoteClicked(note.id) }
+            itemClickState = null
+            passwordViewModel.resetValidation()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -137,27 +149,27 @@ fun HomePage(
         }
 
         itemClickState?.let { clickedNote ->
-            if (clickedNote.protected && clickedNote.passwordHash != null && clickedNote.salt != null) {
-                PasswordUnlockSheet(
-                    onSubmit = {
-                        val status = passwordViewModel.verifyPassword(
-                            it,
-                            storedHash = clickedNote.passwordHash,
-                            storedSalt = clickedNote.salt
-                        )
 
-                        if(status) {
-                            onNoteClicked(clickedNote.id)
-                            itemClickState = null
-                        }
-                    },
-                    onDismiss = {
-                        itemClickState = null
-                    }
-                )
-            } else {
+            if (!passwordViewModel.isProtected(clickedNote)) {
                 onNoteClicked(clickedNote.id)
+                itemClickState = null
+                return@let
             }
+
+            PasswordUnlockSheet(
+                errorMessage = if (validationState == false) "Incorrect password" else null,
+                onClickUnlock = { enteredPassword ->
+                    passwordViewModel.verifyPassword(
+                        enteredPassword,
+                        clickedNote.passwordHash,
+                        clickedNote.salt
+                    )
+                },
+                onDismiss = {
+                    itemClickState = null
+                    passwordViewModel.resetValidation()
+                }
+            )
         }
     }
 }

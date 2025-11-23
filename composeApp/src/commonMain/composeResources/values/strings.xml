@@ -4,6 +4,10 @@
     // Common
     <string name="hello_world">Hello World</string>
 
+    // Home
+    <string name="unlock">Unlock</string>
+    <string name="enter_password_to_unlock">Enter password to unlock</string>
+
     // Profile
     <string name="profile">Profile</string>
 
@@ -11,5 +15,8 @@
     <string name="jog_details">Jog Details</string>
     <string name="title_label">Your title...</string>
     <string name="content_label">Jog your content...</string>
+    <string name="lock_with_passcode">Lock with passcode</string>
+    <string name="remove_passcode">Remove Passcode</string>
+    <string name="lock_with_fingerprint">Lock with fingerprint</string>
 
 </resources>

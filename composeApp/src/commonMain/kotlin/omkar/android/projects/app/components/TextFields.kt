@@ -54,7 +54,7 @@ private fun BaseText(
         fontWeight = config.fontWeight,
         textAlign = config.textAlign,
         maxLines = config.maxLines,
-        overflow = config.overflow
+        overflow = config.overflow,
     )
 }
 

@@ -30,6 +30,9 @@ class JogDetailsViewModel(
     private val _jogMode = MutableStateFlow<JogMode>(JogMode.CREATE)
     val jogMode = _jogMode.asStateFlow()
 
+    private val _updateState = MutableStateFlow<Boolean?>(null)
+    val updateState = _updateState.asStateFlow()
+
     private val _title = MutableStateFlow("")
     private val _content = MutableStateFlow("")
 
@@ -55,11 +58,25 @@ class JogDetailsViewModel(
             salt = passwordDetailsState.salt,
             protected = passwordDetailsState.protected
         )
+        Logger.withTag(TAG).d("updateNotePasswordInfo: noteItem: ${_noteItem.value}")
+    }
+
+    fun removePasswordInfo() {
+        _noteItem.value = _noteItem.value?.copy(
+            passwordHash = null,
+            salt = null,
+            protected = false
+        )
+        Logger.withTag(TAG).d("removePasswordInfo: noteItem: ${_noteItem.value}")
     }
 
     fun updateJogMode(value: JogMode) {
         _jogMode.value = value
         Logger.withTag(TAG).d("updateJogMode: JogMode: $value")
+    }
+
+    fun resetUpdateState() {
+        _updateState.value = null
     }
 
     fun createNote(passwordDetailsState: PasswordDetailsState? = null) {
@@ -73,20 +90,17 @@ class JogDetailsViewModel(
             )
 
             val result = createNotesUseCase.invoke(note)
-            Logger.withTag(TAG).d("createNote: Status: ${ if(result != -1L) "Success" else "Failure"}")
+            _updateState.value = result != -1L
+            Logger.withTag(TAG).d("createNote: Status: ${ if(result != -1L) "Success" else "Failure"}, note: $note")
         }
     }
 
     fun updateNote(joggable: Joggable? = null) {
         joggable?.let {
             viewModelScope.launch(Dispatchers.IO) {
-                val updatedNote = it.copy(
-                    title = _title.value,
-                    content = _content.value
-                )
-
-                val result = updateNotesUseCase.invoke(updatedNote)
-                Logger.withTag(TAG).d("updateNote: Status: ${ if(result != 0) "Success" else "Failure"}")
+                val result = updateNotesUseCase.invoke(it)
+                _updateState.value = result != 0
+                Logger.withTag(TAG).d("updateNote: Status: ${ if(result != 0) "Success" else "Failure"}, note: $it")
             }
         }
     }

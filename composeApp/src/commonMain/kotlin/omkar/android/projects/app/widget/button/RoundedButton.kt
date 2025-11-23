@@ -13,12 +13,16 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import jogit.composeapp.generated.resources.Res
+import jogit.composeapp.generated.resources.hello_world
 import omkar.android.projects.LocalAppColors
 import omkar.android.projects.app.components.TextConfig
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RoundedButton(
-    buttonText: String,
+    buttonText: Any,
     buttonColor: Color = LocalAppColors.current.primary,
     onClick: () -> Unit,
     buttonHeight: Dp = 45.dp,
@@ -37,8 +41,14 @@ fun RoundedButton(
             .fillMaxWidth()
             .height(buttonHeight)
     ) {
+        val textUsed = when(buttonText) {
+            is String -> buttonText
+            is StringResource -> stringResource(buttonText)
+            else -> stringResource(Res.string.hello_world)
+        }
+
         Text(
-            text = if(textConfig.uppercase) buttonText.uppercase() else buttonText,
+            text = if(textConfig.uppercase) textUsed.uppercase() else textUsed,
             maxLines = 1,
             style = TextStyle(
                 fontSize = textConfig.fontSize,

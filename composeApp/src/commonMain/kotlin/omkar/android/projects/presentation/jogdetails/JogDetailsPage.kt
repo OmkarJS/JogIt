@@ -58,9 +58,11 @@ fun JogDetailPage(
     val passedNote by jogDetailsViewModel.noteItem.collectAsState()
     val jogMode by jogDetailsViewModel.jogMode.collectAsState()
     val passwordDetailsState by passwordViewModel.passwordDetailsState.collectAsState()
+    val updateState by jogDetailsViewModel.updateState.collectAsState()
 
     // UI states
     var temporaryPassword by rememberSaveable { mutableStateOf("") }
+    var temporaryProtected by rememberSaveable { mutableStateOf(false) }
     var passwordBottomState by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -79,9 +81,31 @@ fun JogDetailPage(
     }
 
     LaunchedEffect(passwordDetailsState) {
+        Logger.withTag(TAG).d("passwordDetailsState: $passwordDetailsState")
         passwordDetailsState?.let {
             jogDetailsViewModel.updateNotePasswordInfo(it)
+            temporaryProtected = it.protected
         }
+    }
+
+    LaunchedEffect(updateState) {
+        updateState?.let {
+            onBackPressed()
+            jogDetailsViewModel.resetUpdateState()
+        }
+    }
+
+    LaunchedEffect(passedNote) {
+        passedNote?.let {
+            temporaryProtected = it.protected
+        }
+    }
+
+    fun removePassCodeDetails() {
+        jogDetailsViewModel.removePasswordInfo()
+        temporaryProtected = false
+        temporaryPassword = ""
+        passwordBottomState = false
     }
 
     @Composable
@@ -118,7 +142,6 @@ fun JogDetailPage(
                         is JogMode.CREATE -> jogDetailsViewModel.createNote(passwordDetailsState)
                         is JogMode.UPDATE -> jogDetailsViewModel.updateNote(passedNote)
                     }
-                    onBackPressed()
                 },
                 backgroundColor = colors.primary
             ) {
@@ -175,7 +198,7 @@ fun JogDetailPage(
 
         PasswordBottomSheet(
             showBottomSheet = passwordBottomState,
-            isProtected = passedNote?.protected == true,
+            isProtected = temporaryProtected,
             password = temporaryPassword,
             onPasswordChange = {
                 temporaryPassword = it
@@ -189,6 +212,9 @@ fun JogDetailPage(
             },
             onLockWithFingerprint = {
 
+            },
+            removePassCode = {
+                removePassCodeDetails()
             }
         )
     }
