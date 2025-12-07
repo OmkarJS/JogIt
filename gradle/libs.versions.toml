@@ -29,6 +29,7 @@ kotlinxSerializationJson = "1.8.0"
 
 # Android
 ktorClientAndroid = "2.3.6"
+biometricAndroid = "1.4.0-alpha02"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -84,6 +85,9 @@ koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", versi
 
 # Ktor client android
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
+
+# Biometric Authentication
+biometric-android = { module = "androidx.biometric:biometric-ktx", version.ref = "biometricAndroid" }
 
 # 🖥️ DESKTOP
 # Ktor client desktop

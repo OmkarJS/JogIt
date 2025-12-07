@@ -120,6 +120,9 @@ kotlin {
 
             // Room (Android related)
             implementation(libs.androidx.room.sqlite.wrapper)
+
+            // Biometric
+            implementation(libs.biometric.android)
         }
 
         iosMain.dependencies {

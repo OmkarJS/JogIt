@@ -59,6 +59,7 @@ fun JogDetailPage(
     val jogMode by jogDetailsViewModel.jogMode.collectAsState()
     val passwordDetailsState by passwordViewModel.passwordDetailsState.collectAsState()
     val updateState by jogDetailsViewModel.updateState.collectAsState()
+    val isBiometricsAvailable by passwordViewModel.isBiometricsAvailable.collectAsState()
 
     // UI states
     var temporaryPassword by rememberSaveable { mutableStateOf("") }
@@ -113,7 +114,7 @@ fun JogDetailPage(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 20.dp, horizontal = 15.dp),
+                .padding(vertical = 15.dp, horizontal = 15.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             CustomIcon(
@@ -211,11 +212,12 @@ fun JogDetailPage(
                 passwordBottomState = false
             },
             onLockWithFingerprint = {
-
+                passwordViewModel.authenticateFingerprint()
             },
             removePassCode = {
                 removePassCodeDetails()
-            }
+            },
+            isFingerprintAvailable = isBiometricsAvailable
         )
     }
 }

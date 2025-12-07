@@ -1,7 +1,7 @@
 package omkar.android.projects
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import omkar.android.projects.presentation.navigation.MyAppNavigation
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext

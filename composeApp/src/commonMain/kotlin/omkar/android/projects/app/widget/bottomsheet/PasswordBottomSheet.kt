@@ -30,6 +30,7 @@ import omkar.android.projects.app.widget.textfield.CustomTextField
 fun PasswordBottomSheet(
     showBottomSheet: Boolean,
     isProtected: Boolean = false,
+    isFingerprintAvailable: Boolean,
     password: String,
     onPasswordChange: (String) -> Unit,
     onDismiss: () -> Unit,
@@ -45,7 +46,8 @@ fun PasswordBottomSheet(
         ModalBottomSheet(
             sheetState = sheetState,
             onDismissRequest = onDismiss,
-            dragHandle = { BottomSheetDefaults.DragHandle() }
+            dragHandle = { BottomSheetDefaults.DragHandle() },
+            containerColor = LocalAppColors.current.background
         ) {
             Column(
                 modifier = Modifier
@@ -77,16 +79,18 @@ fun PasswordBottomSheet(
                     textConfig = TextConfig(fontSize = 14.sp, uppercase = true, color = LocalAppColors.current.white)
                 )
 
-                SmallSpacer()
+                if(isFingerprintAvailable) {
+                    SmallSpacer()
 
-                RoundedButton(
-                    buttonText = Res.string.lock_with_fingerprint,
-                    onClick = {
-                        onLockWithFingerprint()
-                    },
-                    buttonColor = LocalAppColors.current.white,
-                    textConfig = TextConfig(fontSize = 14.sp, uppercase = true)
-                )
+                    RoundedButton(
+                        buttonText = Res.string.lock_with_fingerprint,
+                        onClick = {
+                            onLockWithFingerprint()
+                        },
+                        buttonColor = LocalAppColors.current.white,
+                        textConfig = TextConfig(fontSize = 14.sp, uppercase = true)
+                    )
+                }
             }
         }
     }
