@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import jogit.composeapp.generated.resources.Res
 import jogit.composeapp.generated.resources.lock_with_fingerprint
 import jogit.composeapp.generated.resources.lock_with_passcode
+import jogit.composeapp.generated.resources.remove_fingerprint
 import jogit.composeapp.generated.resources.remove_passcode
 import omkar.android.projects.LocalAppColors
 import omkar.android.projects.app.components.ExtraLargeSpacer
@@ -29,14 +30,16 @@ import omkar.android.projects.app.widget.textfield.CustomTextField
 @Composable
 fun PasswordBottomSheet(
     showBottomSheet: Boolean,
-    isProtected: Boolean = false,
+    isPasscodeProtected: Boolean = false,
+    isBiometricProtected: Boolean = false,
     isFingerprintAvailable: Boolean,
     password: String,
     onPasswordChange: (String) -> Unit,
     onDismiss: () -> Unit,
     onLockWithPassword: (String) -> Unit,
     onLockWithFingerprint: () -> Unit,
-    removePassCode: () -> Unit
+    removePassCode: () -> Unit,
+    removeBiometricLock: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -71,9 +74,9 @@ fun PasswordBottomSheet(
                 ExtraLargeSpacer()
 
                 RoundedButton(
-                    buttonText = if(!isProtected) Res.string.lock_with_passcode else Res.string.remove_passcode,
+                    buttonText = if(!isPasscodeProtected) Res.string.lock_with_passcode else Res.string.remove_passcode,
                     onClick = {
-                        if(!isProtected) onLockWithPassword(password)
+                        if(!isPasscodeProtected) onLockWithPassword(password)
                         else removePassCode()
                     },
                     textConfig = TextConfig(fontSize = 14.sp, uppercase = true, color = LocalAppColors.current.white)
@@ -83,9 +86,10 @@ fun PasswordBottomSheet(
                     SmallSpacer()
 
                     RoundedButton(
-                        buttonText = Res.string.lock_with_fingerprint,
+                        buttonText = if(!isBiometricProtected) Res.string.lock_with_fingerprint else Res.string.remove_fingerprint,
                         onClick = {
-                            onLockWithFingerprint()
+                            if(!isBiometricProtected) onLockWithFingerprint()
+                            else removeBiometricLock()
                         },
                         buttonColor = LocalAppColors.current.white,
                         textConfig = TextConfig(fontSize = 14.sp, uppercase = true)

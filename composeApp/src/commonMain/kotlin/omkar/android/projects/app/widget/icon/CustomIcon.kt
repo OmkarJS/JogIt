@@ -22,9 +22,10 @@ fun CustomIcon(
     icon: Any,
     iconSize: Dp = 24.dp,
     iconColor: Color = LocalAppColors.current.black,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    modifier: Modifier = Modifier
 ) {
-    var modifier = Modifier.size(iconSize)
+    var modifier = modifier.size(iconSize)
 
     if (onClick != null) {
         modifier = modifier.clickable(

@@ -76,13 +76,24 @@ fun HomePage(
     val notesList by homeViewModel.notesList.collectAsState()
 
     // Password
-    val validationState by passwordViewModel.validationState.collectAsState()
+    val passwordValidationStatus by passwordViewModel.passcodeValidationState.collectAsState()
 
-    LaunchedEffect(validationState) {
-        if (validationState == true) {
+    // Biometric
+    val biometricAuthenticationStatus by passwordViewModel.biometricAuthenticationStatus.collectAsState()
+
+    LaunchedEffect(passwordValidationStatus) {
+        if (passwordValidationStatus == true) {
             itemClickState?.let { note -> onNoteClicked(note.id) }
             itemClickState = null
-            passwordViewModel.resetValidation()
+            passwordViewModel.resetPasswordValidation()
+        }
+    }
+
+    LaunchedEffect(biometricAuthenticationStatus) {
+        if(biometricAuthenticationStatus == true) {
+            itemClickState?.let { note -> onNoteClicked(note.id) }
+            itemClickState = null
+            passwordViewModel.resetBiometricValidation()
         }
     }
 
@@ -138,6 +149,9 @@ fun HomePage(
                     NoteItem(
                         note = note,
                         onClick = {
+                            if(note.hasBiometricLock) {
+                                passwordViewModel.authenticateFingerprint()
+                            }
                             itemClickState = note
                         },
                         onDelete = {
@@ -157,17 +171,22 @@ fun HomePage(
             }
 
             PasswordUnlockSheet(
-                errorMessage = if (validationState == false) "Incorrect password" else null,
-                onClickUnlock = { enteredPassword ->
+                clickedNote.hasPasswordLock,
+                clickedNote.hasBiometricLock,
+                errorMessage = if (passwordValidationStatus == false) "Incorrect password" else null,
+                onPasscodeUnlock = { enteredPassword ->
                     passwordViewModel.verifyPassword(
                         enteredPassword,
                         clickedNote.passwordHash,
                         clickedNote.salt
                     )
                 },
+                onBiometricUnlock = {
+                    passwordViewModel.authenticateFingerprint()
+                },
                 onDismiss = {
                     itemClickState = null
-                    passwordViewModel.resetValidation()
+                    passwordViewModel.resetPasswordValidation()
                 }
             )
         }

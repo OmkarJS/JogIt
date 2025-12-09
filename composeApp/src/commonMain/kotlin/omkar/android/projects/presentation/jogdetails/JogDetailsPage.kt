@@ -57,13 +57,15 @@ fun JogDetailPage(
 
     val passedNote by jogDetailsViewModel.noteItem.collectAsState()
     val jogMode by jogDetailsViewModel.jogMode.collectAsState()
-    val passwordDetailsState by passwordViewModel.passwordDetailsState.collectAsState()
+    val passwordDetailsState by passwordViewModel.passcodeDetailState.collectAsState()
     val updateState by jogDetailsViewModel.updateState.collectAsState()
     val isBiometricsAvailable by passwordViewModel.isBiometricsAvailable.collectAsState()
+    val biometricAuthenticationStatus by passwordViewModel.biometricAuthenticationStatus.collectAsState()
 
     // UI states
     var temporaryPassword by rememberSaveable { mutableStateOf("") }
-    var temporaryProtected by rememberSaveable { mutableStateOf(false) }
+    var temporaryPasscodeProtected by rememberSaveable { mutableStateOf(false) }
+    var temporaryBiometricProtected by rememberSaveable { mutableStateOf(false) }
     var passwordBottomState by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -85,8 +87,14 @@ fun JogDetailPage(
         Logger.withTag(TAG).d("passwordDetailsState: $passwordDetailsState")
         passwordDetailsState?.let {
             jogDetailsViewModel.updateNotePasswordInfo(it)
-            temporaryProtected = it.protected
+            temporaryPasscodeProtected = it.protected
         }
+    }
+
+    LaunchedEffect(biometricAuthenticationStatus) {
+        Logger.withTag(TAG).d("biometricState: $biometricAuthenticationStatus")
+        jogDetailsViewModel.updateNoteBiometricStatus(biometricAuthenticationStatus == true)
+        temporaryBiometricProtected = (biometricAuthenticationStatus == true)
     }
 
     LaunchedEffect(updateState) {
@@ -98,14 +106,21 @@ fun JogDetailPage(
 
     LaunchedEffect(passedNote) {
         passedNote?.let {
-            temporaryProtected = it.protected
+            temporaryPasscodeProtected = it.hasPasswordLock
+            temporaryBiometricProtected = it.hasBiometricLock
         }
     }
 
     fun removePassCodeDetails() {
-        jogDetailsViewModel.removePasswordInfo()
-        temporaryProtected = false
+        jogDetailsViewModel.removePasswordLock()
+        temporaryPasscodeProtected = false
         temporaryPassword = ""
+        passwordBottomState = false
+    }
+
+    fun removeBiometricDetails() {
+        jogDetailsViewModel.removeBiometricLock()
+        temporaryBiometricProtected = false
         passwordBottomState = false
     }
 
@@ -126,7 +141,7 @@ fun JogDetailPage(
 
             CustomIcon(
                 icon = passedNote?.let {
-                    if (it.protected) Res.drawable.ic_locked else Res.drawable.ic_unlocked
+                    if (it.hasPasswordLock) Res.drawable.ic_locked else Res.drawable.ic_unlocked
                 } ?: Res.drawable.ic_unlocked,
                 onClick = {
                     passwordBottomState = true
@@ -140,7 +155,7 @@ fun JogDetailPage(
             FloatingActionButton(
                 onClick = {
                     when (jogMode) {
-                        is JogMode.CREATE -> jogDetailsViewModel.createNote(passwordDetailsState)
+                        is JogMode.CREATE -> jogDetailsViewModel.createNote(passwordDetailsState, biometricAuthenticationStatus == true)
                         is JogMode.UPDATE -> jogDetailsViewModel.updateNote(passedNote)
                     }
                 },
@@ -199,7 +214,8 @@ fun JogDetailPage(
 
         PasswordBottomSheet(
             showBottomSheet = passwordBottomState,
-            isProtected = temporaryProtected,
+            isPasscodeProtected = temporaryPasscodeProtected,
+            isBiometricProtected = temporaryBiometricProtected,
             password = temporaryPassword,
             onPasswordChange = {
                 temporaryPassword = it
@@ -216,6 +232,9 @@ fun JogDetailPage(
             },
             removePassCode = {
                 removePassCodeDetails()
+            },
+            removeBiometricLock = {
+                removeBiometricDetails()
             },
             isFingerprintAvailable = isBiometricsAvailable
         )

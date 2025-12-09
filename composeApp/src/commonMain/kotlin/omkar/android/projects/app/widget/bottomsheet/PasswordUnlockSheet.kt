@@ -18,21 +18,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jogit.composeapp.generated.resources.Res
-import jogit.composeapp.generated.resources.enter_password_to_unlock
+import jogit.composeapp.generated.resources.ic_fingerprint
 import jogit.composeapp.generated.resources.unlock
+import jogit.composeapp.generated.resources.unlock_notes
+import jogit.composeapp.generated.resources.unlock_with_fingerprint
 import omkar.android.projects.LocalAppColors
-import omkar.android.projects.app.components.ExtraLargeSpacer
 import omkar.android.projects.app.components.LargeSpacer
 import omkar.android.projects.app.components.LargeText
+import omkar.android.projects.app.components.MediumSpacer
 import omkar.android.projects.app.components.SemiLargeText
+import omkar.android.projects.app.components.SmallSpacer
 import omkar.android.projects.app.components.TextConfig
 import omkar.android.projects.app.widget.button.RoundedButton
+import omkar.android.projects.app.widget.icon.CustomIcon
 import omkar.android.projects.app.widget.textfield.CustomTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordUnlockSheet(
-    onClickUnlock: (String) -> Unit,
+    isPassCodeProtected: Boolean = false,
+    isBiometricProtected: Boolean = false,
+    onPasscodeUnlock: (String) -> Unit,
+    onBiometricUnlock: () -> Unit,
     onDismiss: () -> Unit,
     errorMessage: String? = null
 ) {
@@ -45,7 +52,8 @@ fun PasswordUnlockSheet(
     ModalBottomSheet(
         sheetState = sheetState,
         onDismissRequest = onDismiss,
-        dragHandle = { BottomSheetDefaults.DragHandle() }
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        containerColor = LocalAppColors.current.background
     ) {
         Column(
             modifier = Modifier
@@ -54,35 +62,63 @@ fun PasswordUnlockSheet(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LargeText(
-                text = Res.string.enter_password_to_unlock,
+                text = Res.string.unlock_notes,
                 TextConfig(fontWeight = FontWeight.Bold)
             )
 
-            ExtraLargeSpacer()
+            MediumSpacer()
 
-            CustomTextField(
-                text = password,
-                onValueChange = {
-                    password = it
-                },
-                textConfig = TextConfig(fontSize = 22.sp),
-                placeholder = {
-                    SemiLargeText("⬤ ⬤ ⬤ ⬤", config = TextConfig(color = LocalAppColors.current.grey))
-                },
-                passwordEnabled = true,
-                maxLength = 10,
-                errorText = errorMessage
-            )
+            if(isBiometricProtected && isPassCodeProtected.not()) {
+                MediumSpacer()
 
-            LargeSpacer()
+                CustomIcon(
+                    icon = Res.drawable.ic_fingerprint,
+                    iconSize = 80.dp
+                )
 
-            RoundedButton(
-                buttonText = Res.string.unlock,
-                onClick = {
-                    onClickUnlock(password)
-                },
-                textConfig = TextConfig(fontSize = 14.sp, uppercase = true, color = LocalAppColors.current.white)
-            )
+                MediumSpacer()
+            }
+
+            if(isPassCodeProtected) {
+                CustomTextField(
+                    text = password,
+                    onValueChange = {
+                        password = it
+                    },
+                    textConfig = TextConfig(fontSize = 22.sp),
+                    placeholder = {
+                        SemiLargeText("⬤ ⬤ ⬤ ⬤", config = TextConfig(color = LocalAppColors.current.grey))
+                    },
+                    passwordEnabled = true,
+                    maxLength = 10,
+                    errorText = errorMessage
+                )
+
+                LargeSpacer()
+
+                RoundedButton(
+                    buttonText = Res.string.unlock,
+                    onClick = {
+                        onPasscodeUnlock(password)
+                    },
+                    textConfig = TextConfig(fontSize = 14.sp, uppercase = true, color = LocalAppColors.current.white)
+                )
+
+                SmallSpacer()
+            }
+
+            if(isBiometricProtected) {
+                RoundedButton(
+                    buttonText = Res.string.unlock_with_fingerprint,
+                    onClick = {
+                        onBiometricUnlock()
+                    },
+                    textConfig = TextConfig(fontSize = 14.sp, uppercase = true, color = LocalAppColors.current.black),
+                    buttonColor = LocalAppColors.current.white
+                )
+
+                SmallSpacer()
+            }
         }
     }
 }

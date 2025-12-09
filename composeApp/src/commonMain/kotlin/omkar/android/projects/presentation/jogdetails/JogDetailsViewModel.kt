@@ -56,18 +56,40 @@ class JogDetailsViewModel(
         _noteItem.value = _noteItem.value?.copy(
             passwordHash = passwordDetailsState.hash,
             salt = passwordDetailsState.salt,
-            protected = passwordDetailsState.protected
+            hasPasswordLock = passwordDetailsState.protected
         )
-        Logger.withTag(TAG).d("updateNotePasswordInfo: noteItem: ${_noteItem.value}")
+        Logger.withTag(TAG).d("removePasswordInfo: " +
+                "passwordHash: ${_noteItem.value?.passwordHash}" +
+                "salt: ${_noteItem.value?.salt}" +
+                "hasPasswordLock: ${_noteItem.value?.hasPasswordLock}"
+        )
     }
 
-    fun removePasswordInfo() {
+    fun updateNoteBiometricStatus(value: Boolean) {
+        _noteItem.value = _noteItem.value?.copy(
+            hasBiometricLock = value
+        )
+        Logger.withTag(TAG).d("updateNoteBiometricStatus: value: $value, noteItem: ${_noteItem.value?.hasBiometricLock}")
+    }
+
+    fun removePasswordLock() {
         _noteItem.value = _noteItem.value?.copy(
             passwordHash = null,
             salt = null,
-            protected = false
+            hasPasswordLock = false
         )
-        Logger.withTag(TAG).d("removePasswordInfo: noteItem: ${_noteItem.value}")
+        Logger.withTag(TAG).d("removePasswordInfo: " +
+                "passwordHash: ${_noteItem.value?.passwordHash}" +
+                "salt: ${_noteItem.value?.salt}" +
+                "hasPasswordLock: ${_noteItem.value?.hasPasswordLock}"
+        )
+    }
+
+    fun removeBiometricLock() {
+        _noteItem.value = _noteItem.value?.copy(
+            hasBiometricLock = false
+        )
+        Logger.withTag(TAG).d("removePasswordInfo: noteItem: ${_noteItem.value?.hasBiometricLock}")
     }
 
     fun updateJogMode(value: JogMode) {
@@ -79,19 +101,24 @@ class JogDetailsViewModel(
         _updateState.value = null
     }
 
-    fun createNote(passwordDetailsState: PasswordDetailsState? = null) {
+    fun createNote(
+        passwordDetailsState: PasswordDetailsState? = null,
+        biometricStatus: Boolean
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             val note = Joggable(
                 title = _title.value,
                 content = _content.value,
                 passwordHash = passwordDetailsState?.hash,
                 salt = passwordDetailsState?.salt,
-                protected = passwordDetailsState?.protected == true
+                hasPasswordLock = passwordDetailsState?.protected == true,
+                hasBiometricLock = biometricStatus
             )
 
             val result = createNotesUseCase.invoke(note)
             _updateState.value = result != -1L
-            Logger.withTag(TAG).d("createNote: Status: ${ if(result != -1L) "Success" else "Failure"}, note: $note")
+            Logger.withTag(TAG)
+                .d("createNote: Status: ${if (result != -1L) "Success" else "Failure"}")
         }
     }
 
@@ -100,7 +127,7 @@ class JogDetailsViewModel(
             viewModelScope.launch(Dispatchers.IO) {
                 val result = updateNotesUseCase.invoke(it)
                 _updateState.value = result != 0
-                Logger.withTag(TAG).d("updateNote: Status: ${ if(result != 0) "Success" else "Failure"}, note: $it")
+                Logger.withTag(TAG).d("updateNote: Status: ${ if(result != 0) "Success" else "Failure"}")
             }
         }
     }

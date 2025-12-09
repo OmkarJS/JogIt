@@ -8,10 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicSecureTextField
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,10 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import jogit.composeapp.generated.resources.Res
+import jogit.composeapp.generated.resources.ic_eye_close
+import jogit.composeapp.generated.resources.ic_eye_open
 import omkar.android.projects.LocalAppColors
 import omkar.android.projects.app.components.DefaultSpacer
 import omkar.android.projects.app.components.MediumText
 import omkar.android.projects.app.components.TextConfig
+import omkar.android.projects.app.widget.icon.CustomIcon
 
 @Composable
 fun CustomTextField(
@@ -80,13 +80,9 @@ fun CustomTextField(
                 }
 
                 if (passwordEnabled) {
-                    Icon(
-                        imageVector = if (passwordVisible)
-                            Icons.Default.Star
-                        else
-                            Icons.Default.Share,
-                        contentDescription = null,
-                        tint = LocalAppColors.current.grey,
+                    CustomIcon(
+                        icon = if (passwordVisible) Res.drawable.ic_eye_close else Res.drawable.ic_eye_open,
+                        iconColor = LocalAppColors.current.grey,
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .clickable { passwordVisible = !passwordVisible }

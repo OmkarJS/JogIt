@@ -9,7 +9,8 @@ data class Joggable(
     val id: Long = 0L,
     val title: String,
     val content: String,
-    val protected: Boolean = false,
+    val hasPasswordLock: Boolean = false,
+    val hasBiometricLock: Boolean = false,
     val passwordHash: String? = null,
     val salt: String? = null
 )
