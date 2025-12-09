@@ -85,7 +85,8 @@ val commonModule = module {
 
     viewModel {
         PasswordViewmodel(
-            passwordUseCases = get()
+            passwordUseCases = get(),
+            biometricAuthenticator = get()
         )
     }
 }
