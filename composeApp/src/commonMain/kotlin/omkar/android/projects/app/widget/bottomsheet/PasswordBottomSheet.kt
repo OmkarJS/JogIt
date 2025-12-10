@@ -60,18 +60,20 @@ fun PasswordBottomSheet(
             ) {
                 MediumSpacer()
 
-                CustomTextField(
-                    text = password,
-                    onValueChange = onPasswordChange,
-                    textConfig = TextConfig(fontSize = 22.sp),
-                    placeholder = {
-                        SemiLargeText("⬤ ⬤ ⬤ ⬤", config = TextConfig(color = LocalAppColors.current.grey))
-                    },
-                    passwordEnabled = true,
-                    maxLength = 10
-                )
+                if(!isPasscodeProtected) {
+                    CustomTextField(
+                        text = password,
+                        onValueChange = onPasswordChange,
+                        textConfig = TextConfig(fontSize = 22.sp),
+                        placeholder = {
+                            SemiLargeText("⬤ ⬤ ⬤ ⬤", config = TextConfig(color = LocalAppColors.current.grey))
+                        },
+                        passwordEnabled = true,
+                        maxLength = 10,
+                    )
 
-                ExtraLargeSpacer()
+                    ExtraLargeSpacer()
+                }
 
                 RoundedButton(
                     buttonText = if(!isPasscodeProtected) Res.string.lock_with_passcode else Res.string.remove_passcode,

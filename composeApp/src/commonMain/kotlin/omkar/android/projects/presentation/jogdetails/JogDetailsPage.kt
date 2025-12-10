@@ -187,7 +187,8 @@ fun JogDetailPage(
                         text = Res.string.title_label,
                         TextConfig(color = colors.grey, fontWeight = FontWeight.Bold)
                     )
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
 
             SemiMediumSpacer()
@@ -199,14 +200,18 @@ fun JogDetailPage(
                 textConfig = TextConfig(
                     fontWeight = FontWeight.Normal,
                     fontSize = 18.sp,
-                    maxLines = Int.MAX_VALUE
+                    maxLines = Int.MAX_VALUE,
+
                 ),
                 placeholder = {
                     SemiLargeText(
                         text = Res.string.content_label,
                         TextConfig(color = colors.grey)
                     )
-                }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
             )
 
             SmallSpacer()

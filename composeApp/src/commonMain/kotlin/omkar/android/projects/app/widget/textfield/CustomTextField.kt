@@ -1,9 +1,12 @@
 package omkar.android.projects.app.widget.textfield
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicSecureTextField
 import androidx.compose.foundation.text.BasicTextField
@@ -16,6 +19,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -41,40 +46,59 @@ fun CustomTextField(
 ) {
     val state = rememberStringTextFieldState(text, onValueChange, maxLength)
     var passwordVisible by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
 
     Column(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            modifier = modifier.then(textConfig.modifier),
-            contentAlignment = Alignment.CenterStart
+            modifier
+                .fillMaxWidth()
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    focusRequester.requestFocus()
+                }
+               .padding(vertical = 4.dp)
+               .padding(horizontal = if (passwordEnabled) 20.dp else 0.dp)
         ) {
             if (state.text.isEmpty() && placeholder != null) {
                 placeholder()
             }
 
-            Row(modifier = modifier) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                val textFieldModifier = Modifier
+                    .run {
+                        if (passwordEnabled) weight(1f) else fillMaxWidth()
+                    }
+                    .focusRequester(focusRequester)
+
+                val textStyle = TextStyle(
+                    fontSize = textConfig.fontSize,
+                    fontWeight = textConfig.fontWeight,
+                    color = textConfig.color ?: LocalAppColors.current.black,
+                    textAlign = textConfig.textAlign
+                )
+
                 if (passwordEnabled && !passwordVisible) {
                     BasicSecureTextField(
                         state = state,
-                        textStyle = TextStyle(
-                            fontSize = textConfig.fontSize,
-                            fontWeight = textConfig.fontWeight,
-                            color = textConfig.color ?: LocalAppColors.current.black,
-                            textAlign = textConfig.textAlign
-                        ),
+                        textStyle = textStyle,
+                        modifier = textFieldModifier,
                         cursorBrush = SolidColor(textConfig.color ?: LocalAppColors.current.black),
                     )
                 } else {
                     BasicTextField(
                         state = state,
-                        textStyle = TextStyle(
-                            fontSize = textConfig.fontSize,
-                            fontWeight = textConfig.fontWeight,
-                            color = textConfig.color ?: LocalAppColors.current.black,
-                            textAlign = textConfig.textAlign
-                        ),
+                        textStyle = textStyle,
+                        modifier = textFieldModifier,
                         cursorBrush = SolidColor(textConfig.color ?: LocalAppColors.current.black)
                     )
                 }
@@ -84,7 +108,7 @@ fun CustomTextField(
                         icon = if (passwordVisible) Res.drawable.ic_eye_close else Res.drawable.ic_eye_open,
                         iconColor = LocalAppColors.current.grey,
                         modifier = Modifier
-                            .padding(end = 8.dp)
+                            .padding(start = 8.dp)
                             .clickable { passwordVisible = !passwordVisible }
                     )
                 }
