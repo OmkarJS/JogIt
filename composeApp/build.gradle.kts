@@ -29,6 +29,9 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
+
+            linkerOpts.add("-framework")
+            linkerOpts.add("LocalAuthentication")
         }
     }
     

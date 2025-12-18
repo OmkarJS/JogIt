@@ -3,6 +3,7 @@
 
     // Common
     <string name="hello_world">Hello World</string>
+    <string name="cancel">Cancel</string>
 
     // Home
     <string name="unlock">Unlock</string>
