@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicSecureTextField
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,6 +48,11 @@ fun CustomTextField(
     val state = rememberStringTextFieldState(text, onValueChange, maxLength)
     var passwordVisible by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
+    val lineLimits = if(textConfig.maxLines == 1) {
+        TextFieldLineLimits.SingleLine
+    } else {
+        TextFieldLineLimits.MultiLine(textConfig.maxLines)
+    }
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -92,14 +98,15 @@ fun CustomTextField(
                         state = state,
                         textStyle = textStyle,
                         modifier = textFieldModifier,
-                        cursorBrush = SolidColor(textConfig.color ?: LocalAppColors.current.black),
+                        cursorBrush = SolidColor(textConfig.color ?: LocalAppColors.current.black)
                     )
                 } else {
                     BasicTextField(
                         state = state,
                         textStyle = textStyle,
                         modifier = textFieldModifier,
-                        cursorBrush = SolidColor(textConfig.color ?: LocalAppColors.current.black)
+                        cursorBrush = SolidColor(textConfig.color ?: LocalAppColors.current.black),
+                        lineLimits = lineLimits
                     )
                 }
 

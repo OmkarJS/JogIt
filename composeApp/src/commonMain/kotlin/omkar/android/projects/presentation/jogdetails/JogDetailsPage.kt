@@ -180,7 +180,8 @@ fun JogDetailPage(
                 onValueChange = { jogDetailsViewModel.updateNoteTitle(it) },
                 textConfig = TextConfig(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 26.sp
+                    fontSize = 26.sp,
+                    maxLines = 1
                 ),
                 placeholder = {
                     TitleMediumText(
