@@ -39,7 +39,6 @@ import omkar.android.projects.app.widget.bottomsheet.PasswordBottomSheet
 import omkar.android.projects.app.widget.icon.CustomIcon
 import omkar.android.projects.app.widget.textfield.CustomTextField
 import omkar.android.projects.data.local.model.jogdetails.JogMode
-import omkar.android.projects.shared.password.presentation.PasswordViewmodel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -53,74 +52,58 @@ fun JogDetailPage(
 ) {
     val colors = LocalAppColors.current
     val jogDetailsViewModel = koinViewModel<JogDetailsViewModel>()
-    val passwordViewModel = koinViewModel<PasswordViewmodel>()
 
-    val passedNote by jogDetailsViewModel.noteItem.collectAsState()
+    // Prerequisites
+    val isBiometricsAvailable by jogDetailsViewModel.isBiometricsAvailable.collectAsState()
+
+    // Data
     val jogMode by jogDetailsViewModel.jogMode.collectAsState()
-    val passwordDetailsState by passwordViewModel.passcodeDetailState.collectAsState()
-    val updateState by jogDetailsViewModel.updateState.collectAsState()
-    val isBiometricsAvailable by passwordViewModel.isBiometricsAvailable.collectAsState()
-    val biometricAuthenticationStatus by passwordViewModel.biometricAuthenticationStatus.collectAsState()
+    val title by jogDetailsViewModel.title.collectAsState()
+    val content by jogDetailsViewModel.content.collectAsState()
+    val passcodeState by jogDetailsViewModel.passcodeState.collectAsState()
+    val biometricState by jogDetailsViewModel.biometricState.collectAsState()
+
+    // Authentication
+    val biometricAuthenticationStatus by jogDetailsViewModel.biometricAuthenticationStatus.collectAsState()
+
+    // Process
+    val noteUpdateState by jogDetailsViewModel.updateState.collectAsState()
 
     // UI states
     var temporaryPassword by rememberSaveable { mutableStateOf("") }
-    var temporaryPasscodeProtected by rememberSaveable { mutableStateOf(false) }
-    var temporaryBiometricProtected by rememberSaveable { mutableStateOf(false) }
     var passwordBottomState by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        Logger.withTag(TAG).d("LaunchedEffect: id: $id")
+        Logger.withTag(TAG).d("Launch: id: $id")
         when(id) {
-            is Long -> jogDetailsViewModel.updateJogMode(JogMode.UPDATE(id))
+            is Long -> {
+                jogDetailsViewModel.updateJogMode(JogMode.UPDATE(id))
+                jogDetailsViewModel.fetchNoteItemFromID(id)
+            }
             else -> jogDetailsViewModel.updateJogMode(JogMode.CREATE)
         }
     }
 
-    LaunchedEffect(jogMode) {
-        when(jogMode) {
-            is JogMode.CREATE -> {}
-            is JogMode.UPDATE -> jogDetailsViewModel.fetchNoteItemFromID((jogMode as JogMode.UPDATE).id)
-        }
-    }
-
-    LaunchedEffect(passwordDetailsState) {
-        Logger.withTag(TAG).d("passwordDetailsState: $passwordDetailsState")
-        passwordDetailsState?.let {
-            jogDetailsViewModel.updateNotePasswordInfo(it)
-            temporaryPasscodeProtected = it.protected
-        }
-    }
-
     LaunchedEffect(biometricAuthenticationStatus) {
-        Logger.withTag(TAG).d("biometricState: $biometricAuthenticationStatus")
+        Logger.withTag(TAG).d("Launch - biometricState: $biometricAuthenticationStatus")
         jogDetailsViewModel.updateNoteBiometricStatus(biometricAuthenticationStatus == true)
-        temporaryBiometricProtected = (biometricAuthenticationStatus == true)
     }
 
-    LaunchedEffect(updateState) {
-        updateState?.let {
+    LaunchedEffect(noteUpdateState) {
+        noteUpdateState?.let {
             onBackPressed()
             jogDetailsViewModel.resetUpdateState()
         }
     }
 
-    LaunchedEffect(passedNote) {
-        passedNote?.let {
-            temporaryPasscodeProtected = it.hasPasswordLock
-            temporaryBiometricProtected = it.hasBiometricLock
-        }
-    }
-
     fun removePassCodeDetails() {
         jogDetailsViewModel.removePasswordLock()
-        temporaryPasscodeProtected = false
         temporaryPassword = ""
         passwordBottomState = false
     }
 
     fun removeBiometricDetails() {
         jogDetailsViewModel.removeBiometricLock()
-        temporaryBiometricProtected = false
         passwordBottomState = false
     }
 
@@ -140,9 +123,8 @@ fun JogDetailPage(
             )
 
             CustomIcon(
-                icon = passedNote?.let {
-                    if (it.hasPasswordLock) Res.drawable.ic_locked else Res.drawable.ic_unlocked
-                } ?: Res.drawable.ic_unlocked,
+                icon = if (passcodeState || biometricState) Res.drawable.ic_locked
+                else Res.drawable.ic_unlocked,
                 onClick = {
                     passwordBottomState = true
                 }
@@ -155,8 +137,8 @@ fun JogDetailPage(
             FloatingActionButton(
                 onClick = {
                     when (jogMode) {
-                        is JogMode.CREATE -> jogDetailsViewModel.createNote(passwordDetailsState, biometricAuthenticationStatus == true)
-                        is JogMode.UPDATE -> jogDetailsViewModel.updateNote(passedNote)
+                        is JogMode.CREATE -> jogDetailsViewModel.createNote()
+                        is JogMode.UPDATE -> jogDetailsViewModel.updateNote((jogMode as JogMode.UPDATE).id)
                     }
                 },
                 backgroundColor = colors.primary
@@ -176,7 +158,7 @@ fun JogDetailPage(
         ) {
             // Title
             CustomTextField(
-                text = passedNote?.title ?: "",
+                text = title,
                 onValueChange = { jogDetailsViewModel.updateNoteTitle(it) },
                 textConfig = TextConfig(
                     fontWeight = FontWeight.Bold,
@@ -196,7 +178,7 @@ fun JogDetailPage(
 
             // Content
             CustomTextField(
-                text = passedNote?.content ?: "",
+                text = content,
                 onValueChange = { jogDetailsViewModel.updateContent(it) },
                 textConfig = TextConfig(
                     fontWeight = FontWeight.Normal,
@@ -220,8 +202,8 @@ fun JogDetailPage(
 
         PasswordBottomSheet(
             showBottomSheet = passwordBottomState,
-            isPasscodeProtected = temporaryPasscodeProtected,
-            isBiometricProtected = temporaryBiometricProtected,
+            isPasscodeProtected = passcodeState,
+            isBiometricProtected = biometricState,
             password = temporaryPassword,
             onPasswordChange = {
                 temporaryPassword = it
@@ -230,11 +212,11 @@ fun JogDetailPage(
                 passwordBottomState = false
             },
             onLockWithPassword = { password ->
-                passwordViewModel.setPassword(password)
+                jogDetailsViewModel.setPassword(password)
                 passwordBottomState = false
             },
             onLockWithFingerprint = {
-                passwordViewModel.authenticateFingerprint()
+                jogDetailsViewModel.validateBiometric()
             },
             removePassCode = {
                 removePassCodeDetails()

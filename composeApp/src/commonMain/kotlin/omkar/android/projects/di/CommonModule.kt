@@ -20,13 +20,14 @@ import omkar.android.projects.shared.password.domain.usecases.VerifyPasswordUseC
 import omkar.android.projects.presentation.home.HomeViewModel
 import omkar.android.projects.presentation.jogdetails.JogDetailsViewModel
 import omkar.android.projects.shared.password.PasswordManager
-import omkar.android.projects.shared.password.presentation.PasswordViewmodel
+import omkar.android.projects.shared.password.domain.usecases.BiometricAvailableUseCase
+import omkar.android.projects.shared.password.domain.usecases.ValidateBiometricUseCase
 import org.koin.dsl.module
 import org.koin.compose.viewmodel.dsl.viewModel
 
 val commonModule = module {
     /**  Managers  */
-    single<PasswordManager> { PasswordManager() }
+    single<PasswordManager> { PasswordManager(get()) }
 
     /**  Repository  */
     // Notes jogger
@@ -56,12 +57,16 @@ val commonModule = module {
     single { HashPasswordWithSaltUseCase(get()) }
     single { GenerateSaltUseCase(get()) }
     single { VerifyPasswordUseCase(get()) }
+    single { BiometricAvailableUseCase(get()) }
+    single { ValidateBiometricUseCase(get()) }
     single {
         PasswordUseCases(
             hashPasswordWithoutSaltUseCase = get(),
             hashPasswordWithSaltUseCase = get(),
             generateSaltUseCase = get(),
-            verifyPasswordUseCase = get()
+            verifyPasswordUseCase = get(),
+            biometricAvailableUseCase = get(),
+            validateBiometricUseCase = get()
         )
     }
 
@@ -72,21 +77,19 @@ val commonModule = module {
     /**  Viewmodel  */
     single {
         // Returns single instance
-        HomeViewModel(get())
+        HomeViewModel(
+            jogUseCases = get(),
+            get(),
+            get()
+        )
     }
 
     viewModel {
         JogDetailsViewModel(
             createNotesUseCase = get(),
             updateNotesUseCase = get(),
-            getNoteFromIDUseCase = get()
-        )
-    }
-
-    viewModel {
-        PasswordViewmodel(
-            passwordUseCases = get(),
-            biometricAuthenticator = get()
+            getNoteFromIDUseCase = get(),
+            passwordUseCases = get()
         )
     }
 }

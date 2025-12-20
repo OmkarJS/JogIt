@@ -25,4 +25,13 @@ class PasswordRepositoryImpl(
     ): Boolean {
         return passwordManager.verifyPassword(password, storedSalt, storedHash)
     }
+
+    // Biometric
+    override fun isBiometricAvailable(): Boolean {
+        return passwordManager.isBiometricAvailable()
+    }
+
+    override suspend fun authenticateFingerprint(): Boolean {
+        return passwordManager.authenticateFingerprint()
+    }
 }
